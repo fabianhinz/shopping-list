@@ -21,7 +21,7 @@ const Cart = () => {
                 <Card>
                     <CartStepper activeStep={Number(activeStep)} />
                     <CardContent>
-                        <SwipeableViews animateHeight disabled index={activeStep}>
+                        <SwipeableViews disabled index={activeStep}>
                             <CartBasket />
                             <CartCheckout />
                             <CartDelivery />

@@ -1,9 +1,12 @@
-import React, { useContext, FunctionComponent } from 'react'
+import React, { useContext, FunctionComponent, useState, useMemo } from 'react'
 import { ShoppingCardItem } from '../../utils/types'
 
 interface ShoppingCardContext {
     shoppingCardItems: Set<ShoppingCardItem>
     shoppingCardBalance: number
+    addToShoppingCard: (item: ShoppingCardItem) => void
+    removeFromShoppingCard: (item: ShoppingCardItem) => void
+    isItemInShoppingCard: (item: ShoppingCardItem) => boolean
 }
 
 const Context = React.createContext<ShoppingCardContext | null>(null)
@@ -11,33 +14,43 @@ const Context = React.createContext<ShoppingCardContext | null>(null)
 export const useShoppingCardContext = () => {
     const context = useContext(Context)
 
-    if (!context) throw new Error('ShoppingCardContext is Null')
+    if (!context) throw new Error('ShoppingCardContext is null')
 
     return context
 }
 
-const shoppingCardItems = new Set<ShoppingCardItem>([
-    {
-        uuid: '1',
-        price: 5,
-        name: 'Eu esse duis ',
-    },
-    {
-        uuid: '2',
-        price: 10,
-        name: 'Nostrud ',
-    },
-    {
-        uuid: '3',
-        price: 15,
-        name: 'In mollit culpa ',
-    },
-])
+const ShoppingCardProvider: FunctionComponent = props => {
+    const [shoppingCardItems, setShoppingCardItems] = useState<Set<ShoppingCardItem>>(new Set())
 
-const ShoppingCardProvider: FunctionComponent = props => (
-    <Context.Provider value={{ shoppingCardItems, shoppingCardBalance: 30 }}>
-        {props.children}
-    </Context.Provider>
-)
+    const shoppingCardBalance = useMemo(
+        () => Array.from(shoppingCardItems.values()).reduce((acc, item) => (acc += item.price), 0),
+        [shoppingCardItems]
+    )
 
+    const addToShoppingCard = (item: ShoppingCardItem) => {
+        setShoppingCardItems(new Set(shoppingCardItems.add(item)))
+    }
+
+    const removeFromShoppingCard = (item: ShoppingCardItem) => {
+        shoppingCardItems.delete(item)
+        setShoppingCardItems(new Set(shoppingCardItems))
+    }
+
+    const isItemInShoppingCard = (item: ShoppingCardItem) => {
+        return shoppingCardItems.has(item)
+    }
+
+    return (
+        <Context.Provider
+            value={{
+                shoppingCardItems,
+                shoppingCardBalance,
+                addToShoppingCard,
+                removeFromShoppingCard,
+                isItemInShoppingCard,
+            }}>
+            {props.children}
+        </Context.Provider>
+    )
+}
 export default ShoppingCardProvider

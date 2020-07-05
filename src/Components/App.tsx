@@ -6,10 +6,17 @@ import { CssBaseline } from '@material-ui/core'
 import { WithChildren } from '../utils/componentTypes'
 import ShoppingCardProvider from './Provider/ShoppingCardProvider'
 import ThemeProvider from './Provider/ThemeProvider'
+import AccountProvider from './Provider/AccountProvider'
+import Search from './Search/Search'
+import SearchProvider from './Provider/SearchProvider'
 
 const AppProvider = (props: WithChildren) => (
     <ThemeProvider>
-        <ShoppingCardProvider>{props.children}</ShoppingCardProvider>
+        <AccountProvider>
+            <ShoppingCardProvider>
+                <SearchProvider>{props.children}</SearchProvider>
+            </ShoppingCardProvider>
+        </AccountProvider>
     </ThemeProvider>
 )
 
@@ -21,6 +28,7 @@ const App = () => {
                 <AppProvider>
                     <Header />
                     <Main />
+                    <Search />
                 </AppProvider>
             </BrowserRouter>
         </>
