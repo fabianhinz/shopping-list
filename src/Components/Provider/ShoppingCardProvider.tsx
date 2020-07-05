@@ -3,6 +3,7 @@ import { ShoppingCardItem } from '../../utils/types'
 
 interface ShoppingCardContext {
     shoppingCardItems: Set<ShoppingCardItem>
+    shoppingCardBalance: number
 }
 
 const Context = React.createContext<ShoppingCardContext | null>(null)
@@ -17,16 +18,26 @@ export const useShoppingCardContext = () => {
 
 const shoppingCardItems = new Set<ShoppingCardItem>([
     {
-        uuid: 'asdf',
-        price: 1,
-        name:
-            'Eu esse duis mollit veniam reprehenderit laboris ad officia nostrud occaecat ea exercitation.',
-        quantity: 1,
+        uuid: '1',
+        price: 5,
+        name: 'Eu esse duis ',
+    },
+    {
+        uuid: '2',
+        price: 10,
+        name: 'Nostrud ',
+    },
+    {
+        uuid: '3',
+        price: 15,
+        name: 'In mollit culpa ',
     },
 ])
 
 const ShoppingCardProvider: FunctionComponent = props => (
-    <Context.Provider value={{ shoppingCardItems }}>{props.children}</Context.Provider>
+    <Context.Provider value={{ shoppingCardItems, shoppingCardBalance: 30 }}>
+        {props.children}
+    </Context.Provider>
 )
 
 export default ShoppingCardProvider

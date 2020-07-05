@@ -17,7 +17,7 @@ const Routes = () => (
         <LazyRoute path="/" exact>
             <ItemsComponent />
         </LazyRoute>
-        <LazyRoute path="/cart" exact>
+        <LazyRoute path={['/cart', '/cart/:activeStep']} exact>
             <CardComponent />
         </LazyRoute>
         <LazyRoute path="/account" exact>
